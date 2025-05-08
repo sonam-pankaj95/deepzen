@@ -52,7 +52,7 @@ The game presents different types of moral questions:
 ## Scoring System
 
 - Scores range from 1 to 10
-- Higher scores (8+) for utilitarian answers
+- Higher scores (7+) for utilitarian answers
 - Good scores (7+) for deontological answers
 - Lower scores (3-5) for rule-following without question
 - Score of 5 or higher required to advance to next level
