@@ -38,81 +38,49 @@ def grade_morality(question, answer):
         return 0, f"Error grading morality: {e}"
 
 
-def get_next_question(previous_answers):
+def generate_question(previous_answers, current_level):
     """
-    Determines the next question based on previous answers.
+    Generates a new question using Gemini based on previous answers and current level.
     """
-    if not previous_answers:
-        return inquirer.List(
-            "question1",
-            message="What is more important?",
-            choices=[
-                "Maximizing happiness for the greatest number of people, even if it means sacrificing individual rights.",
-                "Upholding individual rights and duties, even if it means less overall happiness.",
-                "Striving for personal virtue and excellence, regardless of consequences.",
-                "Following the rules and laws of society without question.",
-            ],
-        )
-
-    last_answer = list(previous_answers.values())[-1]
-    question_number = len(previous_answers) + 1
-
-    if question_number == 2:
-        if "Maximizing happiness" in last_answer:
-            return inquirer.List(
-                "question2",
-                message="If you could save one person from a burning building, who would it be?",
-                choices=[
-                    "A brilliant scientist who could cure a deadly disease.",
-                    "A close family member.",
-                    "A random stranger.",
-                    "A religious figure known for their good deeds.",
-                ],
-            )
-        elif "Upholding individual rights" in last_answer:
-            return inquirer.List(
-                "question2",
-                message="How would you handle a situation where someone's rights conflict with public safety?",
-                choices=[
-                    "Prioritize public safety over individual rights.",
-                    "Find a compromise that respects both.",
-                    "Always uphold individual rights regardless of consequences.",
-                    "Let the legal system decide.",
-                ],
-            )
-        elif "Striving for personal virtue" in last_answer:
-            return inquirer.List(
-                "question2",
-                message="What is the most important virtue to cultivate?",
-                choices=[
-                    "Courage in the face of adversity.",
-                    "Compassion for others.",
-                    "Wisdom and understanding.",
-                    "Justice and fairness.",
-                ],
-            )
-        else:  # Following rules
-            return inquirer.List(
-                "question2",
-                message="What would you do if you discovered a law that was unjust?",
-                choices=[
-                    "Follow it anyway, as it's the law.",
-                    "Work within the system to change it.",
-                    "Civil disobedience to protest it.",
-                    "Seek legal loopholes to avoid it.",
-                ],
-            )
-    else:  # question_number == 3
-        return inquirer.List(
-            "question3",
-            message="What is your ultimate goal in life?",
-            choices=[
-                "To achieve personal success and happiness.",
-                "To make the world a better place for others.",
-                "To fulfill your duties and responsibilities.",
-                "To seek truth and understanding.",
-            ],
-        )
+    prompt = f"""
+    You are a philosophical question generator. Generate a thought-provoking moral question based on the following context:
+    
+    Previous answers: {previous_answers}
+    Current level: {current_level}
+    
+    Generate a question that:
+    1. Is more challenging than previous questions
+    2. Relates to the user's previous answers
+    3. Explores deeper moral and philosophical concepts
+    4. Has exactly 4 distinct answer choices
+    
+    Format your response as:
+    QUESTION: [Your question here]
+    CHOICES:
+    1. [First choice]
+    2. [Second choice]
+    3. [Third choice]
+    4. [Fourth choice]
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        response_text = response.text.strip()
+        
+        # Parse the response to extract question and choices
+        parts = response_text.split("CHOICES:")
+        question = parts[0].replace("QUESTION:", "").strip()
+        choices = [choice.strip() for choice in parts[1].strip().split("\n") if choice.strip()]
+        
+        return question, choices
+    except Exception as e:
+        # Fallback question in case of error
+        return "What is the most important virtue to cultivate?", [
+            "Courage in the face of adversity.",
+            "Compassion for others.",
+            "Wisdom and understanding.",
+            "Justice and fairness."
+        ]
 
 
 def run_cli():
@@ -120,31 +88,43 @@ def run_cli():
     Runs the command-line interface for asking existential questions and grading morality.
     """
     previous_answers = {}
-    question_number = 1
     current_level = 1
+    max_level = 5
 
-    while question_number <= 3:  # We'll ask 3 questions total
-        current_question = get_next_question(previous_answers)
+    while current_level <= max_level:
+        question, choices = generate_question(previous_answers, current_level)
+        
+        # Print the question first
+        print(f"\nLevel {current_level} Question:")
+        print(f"{question}\n")
+        
+        current_question = inquirer.List(
+            f"question{current_level}",
+            message="Select your answer:",
+            choices=choices
+        )
+        
         answer = inquirer.prompt([current_question])
 
         if not answer:  # User cancelled
             break
 
-        question_text = current_question.message
         user_answer = answer[current_question.name]
         previous_answers[current_question.name] = user_answer
 
-        score, explanation = grade_morality(question_text, user_answer)
-        print(f"\nQuestion {question_number}: {question_text}")
-        print(f"Your Answer: {user_answer}")
+        score, explanation = grade_morality(question, user_answer)
+        print(f"\nYour Answer: {user_answer}")
 
         if score <= 5:
             print(f"Morality Assessment:\nScore: {score}\n{explanation}")
+            print("\nGame Over! You didn't meet the moral threshold to advance.")
+            break
         else:
+            print(f"\n🎉 Congratulations! You've advanced to Level {current_level + 1}!")
             current_level += 1
-            print(f"\n🎉 Congratulations! You've advanced to Level {current_level}!")
 
-        question_number += 1
+    if current_level > max_level:
+        print("\n🌟 Congratulations! You've completed all levels and demonstrated exceptional moral reasoning!")
 
 
 if __name__ == "__main__":

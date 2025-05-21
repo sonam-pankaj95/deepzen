@@ -1,6 +1,55 @@
-# Morality Assessment Game
+# Moral Reasoning Game
 
-An interactive command-line game that assesses moral choices through a series of philosophical questions. The game uses Google's Gemini AI to evaluate responses based on utilitarian and deontological principles.
+An interactive web-based game that tests and develops moral reasoning through a series of thought-provoking questions.
+
+## Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Set up environment variables:
+   ```bash
+   export GOOGLE_API_KEY=your_api_key_here
+   ```
+
+## Local Development
+
+Run the application locally:
+```bash
+python app.py
+```
+
+## Deployment
+
+### Railway Deployment
+
+1. Create a new project on [Railway](https://railway.app/)
+2. Connect your GitHub repository
+3. Add the following environment variables:
+   - `GOOGLE_API_KEY`: Your Google API key
+4. Deploy!
+
+### Vercel Deployment
+
+1. Create a new project on [Vercel](https://vercel.com)
+2. Connect your GitHub repository
+3. Add the following environment variables:
+   - `GOOGLE_API_KEY`: Your Google API key
+4. Deploy!
+
+## Environment Variables
+
+- `GOOGLE_API_KEY`: Your Google API key for Gemini AI
+- `PORT`: Port number (default: 5000)
+
+## Technologies Used
+
+- Flask
+- Google Gemini AI
+- TailwindCSS
+- Railway/Vercel for deployment
 
 ## Features
 

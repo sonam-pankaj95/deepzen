@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moral Reasoning Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-3xl font-bold text-center mb-8">Moral Reasoning Game</h1>
+            
+            <div id="game-container">
+                <div id="question-container" class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Level <span id="level">1</span></h2>
+                    <p id="question" class="text-lg mb-4"></p>
+                    <div id="choices" class="space-y-2"></div>
+                </div>
+                
+                <div id="result-container" class="hidden">
+                    <div id="score" class="text-xl font-semibold mb-2"></div>
+                    <div id="explanation" class="mb-4"></div>
+                    <div id="message" class="text-lg font-semibold"></div>
+                    <button id="next-button" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hidden">
+                        Continue
+                    </button>
+                    <button id="restart-button" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 hidden">
+                        Play Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = '';
+        
+        async function loadQuestion() {
+            const response = await fetch('/get_question');
+            const data = await response.json();
+            
+            document.getElementById('level').textContent = data.level;
+            document.getElementById('question').textContent = data.question;
+            currentQuestion = data.question;
+            
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+            
+            data.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-3 bg-gray-100 rounded hover:bg-gray-200 transition-colors';
+                button.textContent = choice;
+                button.onclick = () => submitAnswer(choice);
+                choicesContainer.appendChild(button);
+            });
+            
+            document.getElementById('question-container').classList.remove('hidden');
+            document.getElementById('result-container').classList.add('hidden');
+        }
+        
+        async function submitAnswer(answer) {
+            const response = await fetch('/submit_answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    answer: answer,
+                    question: currentQuestion
+                })
+            });
+            
+            const data = await response.json();
+            
+            document.getElementById('question-container').classList.add('hidden');
+            document.getElementById('result-container').classList.remove('hidden');
+            
+            document.getElementById('score').textContent = `Score: ${data.score}`;
+            document.getElementById('explanation').textContent = data.explanation;
+            document.getElementById('message').textContent = data.message;
+            
+            if (data.success) {
+                if (data.message.includes('completed')) {
+                    document.getElementById('next-button').classList.add('hidden');
+                    document.getElementById('restart-button').classList.remove('hidden');
+                } else {
+                    document.getElementById('next-button').classList.remove('hidden');
+                    document.getElementById('restart-button').classList.add('hidden');
+                }
+            } else {
+                document.getElementById('next-button').classList.add('hidden');
+                document.getElementById('restart-button').classList.remove('hidden');
+            }
+        }
+        
+        document.getElementById('next-button').onclick = loadQuestion;
+        document.getElementById('restart-button').onclick = () => {
+            window.location.reload();
+        };
+        
+        // Load first question when page loads
+        loadQuestion();
+    </script>
+</body>
+</html> 
