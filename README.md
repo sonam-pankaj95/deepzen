@@ -1,111 +1,88 @@
-# Moral Reasoning Game
+# DeepZen
 
-An interactive web-based game that tests and develops moral reasoning through a series of thought-provoking questions.
-
-## Setup
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Set up environment variables:
-   ```bash
-   export GOOGLE_API_KEY=your_api_key_here
-   ```
-
-## Local Development
-
-Run the application locally:
-```bash
-python app.py
-```
-
-## Deployment
-
-### Railway Deployment
-
-1. Create a new project on [Railway](https://railway.app/)
-2. Connect your GitHub repository
-3. Add the following environment variables:
-   - `GOOGLE_API_KEY`: Your Google API key
-4. Deploy!
-
-### Vercel Deployment
-
-1. Create a new project on [Vercel](https://vercel.com)
-2. Connect your GitHub repository
-3. Add the following environment variables:
-   - `GOOGLE_API_KEY`: Your Google API key
-4. Deploy!
-
-## Environment Variables
-
-- `GOOGLE_API_KEY`: Your Google API key for Gemini AI
-- `PORT`: Port number (default: 5000)
-
-## Technologies Used
-
-- Flask
-- Google Gemini AI
-- TailwindCSS
-- Railway/Vercel for deployment
+A thought-provoking game that presents players with challenging moral scenarios and evaluates responses based on moral reasoning principles.
 
 ## Features
 
-- Interactive command-line interface with multiple-choice questions
-- AI-powered morality assessment using Google's Gemini API
-- Progressive difficulty with three levels
-- Personalized questions based on previous answers
-- Detailed scoring and explanations for each response
+- Interactive moral reasoning challenges
+- Progressive difficulty levels
+- AI-powered question generation
+- Real-time moral assessment
+- Web-based interface
+- Command-line interface option
 
 ## Prerequisites
 
-- Python 3.x
+- Python 3.7 or higher
 - Google API key for Gemini AI
 
 ## Installation
 
-1. Clone this repository
-2. Install required packages:
+1. Clone the repository:
 ```bash
-pip3 install inquirer google-generativeai
+git clone https://github.com/yourusername/deepzen.git
+cd deepzen
 ```
 
-3. Set up your Google API key:
+2. Install the required dependencies:
 ```bash
-export GOOGLE_API_KEY="your_api_key_here"
+pip install -r requirements.txt
 ```
 
-## How to Play
-
-1. Run the game:
-```bash
-python3 game.py
+3. Set up your environment variables:
+Create a `.env` file in the project root and add your Google API key:
+```
+GOOGLE_API_KEY=your_api_key_here
 ```
 
-2. Answer a series of three questions about moral dilemmas
-3. Each answer is evaluated by the AI based on:
-   - Utilitarian principles (maximizing happiness)
-   - Deontological principles (duty and rights)
-4. Advance to the next level if your answer receives a high morality score
-5. Receive detailed explanations of the moral implications of your choices
+## Usage
 
-## Question Types
+### Web Interface
 
-The game presents different types of moral questions:
-- First question: Fundamental moral principles
-- Second question: Applied moral dilemmas
-- Third question: Personal moral goals
+1. Start the Flask server:
+```bash
+python app.py
+```
 
-## Scoring System
+2. Open your web browser and navigate to `http://localhost:5000`
 
-- Scores range from 1 to 10
-- Higher scores (7+) for utilitarian answers
-- Good scores (7+) for deontological answers
-- Lower scores (3-5) for rule-following without question
-- Score of 5 or higher required to advance to next level
+### Command Line Interface
 
-## Note
+Run the CLI version:
+```bash
+python game.py
+```
 
-This game is designed for educational and entertainment purposes. The moral assessments are based on AI interpretation and should not be taken as definitive moral judgments. 
+## Game Mechanics
+
+- The game consists of 5 levels of increasing difficulty
+- Each level presents a unique moral question with 4 possible answers
+- Your answers are evaluated based on moral reasoning principles
+- To advance to the next level, you must achieve a morality score above 5
+- The game ends if you fail to meet the moral threshold or complete all levels
+
+## Technical Details
+
+The project uses:
+- Flask for the web interface
+- Google's Gemini AI for question generation and moral assessment
+- Python-dotenv for environment variable management
+- Gunicorn for production deployment
+
+## Deployment
+
+The project includes a `Procfile` for easy deployment to platforms like Heroku. Make sure to set the `GOOGLE_API_KEY` environment variable in your deployment environment.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Google Gemini AI for powering the DeepZen engine
+- Flask framework for the web interface
+- All contributors and users of the project 

@@ -124,7 +124,7 @@ def run_cli():
             current_level += 1
 
     if current_level > max_level:
-        print("\n🌟 Congratulations! You've completed all levels and demonstrated exceptional moral reasoning!")
+        print("\n🌟 Congratulations! You've completed all levels and demonstrated exceptional wisdom in DeepZen!")
 
 
 if __name__ == "__main__":

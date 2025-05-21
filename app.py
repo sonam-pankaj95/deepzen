@@ -54,7 +54,7 @@ def submit_answer():
                 'success': True,
                 'score': score,
                 'explanation': explanation,
-                'message': "🌟 Congratulations! You've completed all levels and demonstrated exceptional moral reasoning!"
+                'message': "🌟 Congratulations! You've completed all levels and demonstrated exceptional wisdom in DeepZen!"
             })
         return jsonify({
             'success': True,
