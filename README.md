@@ -1,4 +1,9 @@
-# DeepZen
+<p align ="center">
+<img width=400 src = "https://royal-hygienic-522.notion.site/image/attachment%3Abfef59e2-82de-456f-b505-bf2288f7658b%3Aimage-removebg-preview.png?table=block&id=1fa81b6a-6bbe-8058-8ab1-de4a0745cd9e&spaceId=f1bf59bf-2c3f-4b4d-a5f9-109d041ef45a&width=870&userId=&cache=v2">
+</p>
+
+
+# DeepZen: LLM-as-a-gaming-engine
 
 A thought-provoking game that presents players with challenging moral scenarios and evaluates responses based on moral reasoning principles.
 
