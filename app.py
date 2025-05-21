@@ -3,7 +3,7 @@ import os
 from game import generate_question, grade_morality
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))
 
 @app.route('/')
 def home():
@@ -61,7 +61,4 @@ def submit_answer():
             'score': score,
             'explanation': explanation,
             'message': f"🎉 Congratulations! You've advanced to Level {session['current_level']}!"
-        })
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000))) 
+        }) 
